@@ -25,6 +25,9 @@ import {
 } from '../..';
 
 describe('operationArgsParser', () => {
+  let requestBodyParser: RequestBodyParser;
+  before(givenRequestBodyParser);
+
   it('parses path parameters', async () => {
     const req = givenRequest();
     const spec = givenOperationWithParameters([
@@ -37,7 +40,7 @@ describe('operationArgsParser', () => {
     ]);
     const route = givenResolvedRoute(spec, {id: 1});
 
-    const args = await parseOperationArgs(req, route);
+    const args = await parseOperationArgs(req, route, requestBodyParser);
 
     expect(args).to.eql([1]);
   });
@@ -54,7 +57,7 @@ describe('operationArgsParser', () => {
     });
     const route = givenResolvedRoute(spec);
 
-    const args = await parseOperationArgs(req, route);
+    const args = await parseOperationArgs(req, route, requestBodyParser);
 
     expect(args).to.eql([{key: 'value'}]);
   });
@@ -76,7 +79,7 @@ describe('operationArgsParser', () => {
     });
     const route = givenResolvedRoute(spec);
 
-    const args = await parseOperationArgs(req, route);
+    const args = await parseOperationArgs(req, route, requestBodyParser);
 
     expect(args).to.eql([{key: 'value'}]);
   });
@@ -107,7 +110,7 @@ describe('operationArgsParser', () => {
     });
     const route = givenResolvedRoute(spec);
 
-    const args = await parseOperationArgs(req, route);
+    const args = await parseOperationArgs(req, route, requestBodyParser);
 
     expect(args).to.eql([{key1: 'value', key2: 1, key3: true}]);
   });
@@ -136,7 +139,7 @@ describe('operationArgsParser', () => {
     });
     const route = givenResolvedRoute(spec);
 
-    const args = await parseOperationArgs(req, route);
+    const args = await parseOperationArgs(req, route, requestBodyParser);
 
     expect(args).to.eql([{key: [1, 2]}]);
   });
@@ -177,7 +180,7 @@ describe('operationArgsParser', () => {
     });
     const route = givenResolvedRoute(spec);
 
-    const args = await parseOperationArgs(req, route);
+    const args = await parseOperationArgs(req, route, requestBodyParser);
 
     expect(args).to.eql([
       {
@@ -212,7 +215,7 @@ describe('operationArgsParser', () => {
     });
     const route = givenResolvedRoute(spec);
 
-    const args = await parseOperationArgs(req, route);
+    const args = await parseOperationArgs(req, route, requestBodyParser);
 
     expect(args).to.eql([{key1: ['value1', 'value2']}]);
   });
@@ -234,7 +237,7 @@ describe('operationArgsParser', () => {
     });
     const route = givenResolvedRoute(spec);
 
-    const args = await parseOperationArgs(req, route);
+    const args = await parseOperationArgs(req, route, requestBodyParser);
 
     expect(args).to.eql(['plain-text']);
   });
@@ -256,7 +259,7 @@ describe('operationArgsParser', () => {
     });
     const route = givenResolvedRoute(spec);
 
-    const args = await parseOperationArgs(req, route);
+    const args = await parseOperationArgs(req, route, requestBodyParser);
 
     expect(args).to.eql(['<html><body><h1>Hello</h1></body></html>']);
   });
@@ -270,7 +273,7 @@ describe('operationArgsParser', () => {
       const spec = givenOperationWithObjectParameter('value');
       const route = givenResolvedRoute(spec);
 
-      const args = await parseOperationArgs(req, route);
+      const args = await parseOperationArgs(req, route, requestBodyParser);
 
       expect(args).to.eql([{key: 'value'}]);
     });
@@ -283,7 +286,7 @@ describe('operationArgsParser', () => {
       const spec = givenOperationWithObjectParameter('value');
       const route = givenResolvedRoute(spec);
 
-      const args = await parseOperationArgs(req, route);
+      const args = await parseOperationArgs(req, route, requestBodyParser);
 
       expect(args).to.eql([{key: 'value'}]);
     });
@@ -296,7 +299,9 @@ describe('operationArgsParser', () => {
       const spec = givenOperationWithObjectParameter('value');
       const route = givenResolvedRoute(spec);
 
-      await expect(parseOperationArgs(req, route)).to.be.rejectedWith(
+      await expect(
+        parseOperationArgs(req, route, requestBodyParser),
+      ).to.be.rejectedWith(
         RestHttpErrors.invalidData('{"malformed-JSON"}', 'value', {
           details: {
             syntaxError: 'Unexpected token } in JSON at position 17',
@@ -313,9 +318,9 @@ describe('operationArgsParser', () => {
       const spec = givenOperationWithObjectParameter('value');
       const route = givenResolvedRoute(spec);
 
-      await expect(parseOperationArgs(req, route)).to.be.rejectedWith(
-        RestHttpErrors.invalidData('[1,2]', 'value'),
-      );
+      await expect(
+        parseOperationArgs(req, route, requestBodyParser),
+      ).to.be.rejectedWith(RestHttpErrors.invalidData('[1,2]', 'value'));
     });
 
     it('rejects array values provided via nested keys', async () => {
@@ -326,9 +331,9 @@ describe('operationArgsParser', () => {
       const spec = givenOperationWithObjectParameter('value');
       const route = givenResolvedRoute(spec);
 
-      await expect(parseOperationArgs(req, route)).to.be.rejectedWith(
-        RestHttpErrors.invalidData(['1', '2'], 'value'),
-      );
+      await expect(
+        parseOperationArgs(req, route, requestBodyParser),
+      ).to.be.rejectedWith(RestHttpErrors.invalidData(['1', '2'], 'value'));
     });
 
     function givenOperationWithObjectParameter(
@@ -349,10 +354,6 @@ describe('operationArgsParser', () => {
   });
 
   describe('body parser', () => {
-    let requestBodyParser: RequestBodyParser;
-
-    before(givenRequestBodyParser);
-
     it('parses body parameter with multiple media types', async () => {
       const req = givenRequest({
         url: '/',
@@ -415,11 +416,11 @@ describe('operationArgsParser', () => {
         schema: defaultSchema,
       });
     });
-
-    function givenRequestBodyParser() {
-      requestBodyParser = new RequestBodyParser();
-    }
   });
+
+  function givenRequestBodyParser() {
+    requestBodyParser = new RequestBodyParser();
+  }
 
   function givenOperationWithParameters(params?: ParameterObject[]) {
     return <OperationObject>{

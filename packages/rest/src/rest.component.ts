@@ -10,7 +10,7 @@ import {
   Server,
   Application,
 } from '@loopback/core';
-import {inject, Constructor} from '@loopback/context';
+import {inject, Constructor, Binding, BindingScope} from '@loopback/context';
 import {RestBindings} from './keys';
 import {
   BindElementProvider,
@@ -25,6 +25,13 @@ import {
 import {RestServer, RestServerConfig} from './rest.server';
 import {DefaultSequence} from './sequence';
 import {createEmptyApiSpec} from '@loopback/openapi-v3-types';
+import {
+  RequestBodyParser,
+  JsonBodyParser,
+  REQUEST_BODY_PARSER_TAG,
+  TextBodyParser,
+  UrlEncodedBodyParser,
+} from './body-parsers';
 
 export class RestComponent implements Component {
   providers: ProviderMap = {
@@ -37,6 +44,26 @@ export class RestComponent implements Component {
     [RestBindings.SequenceActions.PARSE_PARAMS.key]: ParseParamsProvider,
     [RestBindings.SequenceActions.SEND.key]: SendProvider,
   };
+  /**
+   * Add built-in body parsers
+   */
+  bindings = [
+    Binding.bind(RestBindings.REQUEST_BODY_PARSER)
+      .toClass(RequestBodyParser)
+      .inScope(BindingScope.SINGLETON),
+    Binding.bind(RestBindings.REQUEST_BODY_PARSER_JSON)
+      .toClass(JsonBodyParser)
+      .inScope(BindingScope.SINGLETON)
+      .tag(REQUEST_BODY_PARSER_TAG),
+    Binding.bind(RestBindings.REQUEST_BODY_PARSER_TEXT)
+      .toClass(TextBodyParser)
+      .inScope(BindingScope.SINGLETON)
+      .tag(REQUEST_BODY_PARSER_TAG),
+    Binding.bind(RestBindings.REQUEST_BODY_PARSER_URLENCODED)
+      .toClass(UrlEncodedBodyParser)
+      .inScope(BindingScope.SINGLETON)
+      .tag(REQUEST_BODY_PARSER_TAG),
+  ];
   servers: {
     [name: string]: Constructor<Server>;
   } = {

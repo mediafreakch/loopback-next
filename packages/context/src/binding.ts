@@ -4,7 +4,7 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import {Context} from './context';
-import {BindingKey} from './binding-key';
+import {BindingKey, BindingAddress} from './binding-key';
 import {ResolutionSession} from './resolution-session';
 import {instantiateClass} from './resolver';
 import {
@@ -443,7 +443,7 @@ export class Binding<T = BoundValue> {
    * easy to read.
    * @param key Binding key
    */
-  static bind(key: string): Binding {
-    return new Binding(key);
+  static bind(key: BindingAddress<unknown>): Binding {
+    return new Binding(key.toString());
   }
 }
