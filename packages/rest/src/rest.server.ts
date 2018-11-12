@@ -46,6 +46,7 @@ import {
   Response,
   Send,
 } from './types';
+import {BodyParser, REQUEST_BODY_PARSER_TAG} from './body-parsers';
 
 const debug = debugFactory('loopback:rest:server');
 
@@ -714,6 +715,16 @@ export class RestServer extends Context implements Server, HttpServerLike {
     }
 
     this.sequence(SequenceFromFunction);
+  }
+
+  /**
+   * Bind a body parser to the server context
+   * @param bodyParserClass
+   */
+  bodyParser(bodyParserClass: Constructor<BodyParser>) {
+    this.bind(`${RestBindings.REQUEST_BODY_PARSER}.${bodyParserClass.name}`)
+      .toClass(bodyParserClass)
+      .tag(REQUEST_BODY_PARSER_TAG);
   }
 
   /**

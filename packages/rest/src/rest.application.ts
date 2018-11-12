@@ -14,6 +14,7 @@ import {RestComponent} from './rest.component';
 import {HttpRequestListener, HttpServerLike, RestServer} from './rest.server';
 import {ControllerClass, ControllerFactory, RouteEntry} from './router';
 import {SequenceFunction, SequenceHandler} from './sequence';
+import {BodyParser} from './body-parsers';
 
 export const ERR_NO_MULTI_SERVER = format(
   'RestApplication does not support multiple servers!',
@@ -92,6 +93,14 @@ export class RestApplication extends Application implements HttpServerLike {
    */
   static(path: PathParams, rootDir: string, options?: ServeStaticOptions) {
     this.restServer.static(path, rootDir, options);
+  }
+
+  /**
+   * Bind a body parser to the server context
+   * @param bodyParserClass
+   */
+  bodyParser(bodyParserClass: Constructor<BodyParser>) {
+    this.restServer.bodyParser(bodyParserClass);
   }
 
   /**
