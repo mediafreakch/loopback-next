@@ -10,19 +10,22 @@
     "build": "lb-tsc es2017 --outDir dist",
     "clean": "lb-clean loopback-explorer*.tgz dist package api-docs",
     "pretest": "npm run build",
-    "test": "lb-mocha \"DIST/test/**/*.js\"",
+    "test": "lb-mocha \"dist/test/**/*.js\"",
     "verify": "npm pack && tar xf loopback-explorer*.tgz && tree package && npm run clean"
   },
   "author": "IBM",
   "copyright.owner": "IBM Corp.",
   "license": "MIT",
   "dependencies": {
+    "@loopback/context": "^1.0.1",
+    "@loopback/core": "^1.0.1",
+    "@loopback/rest": "^1.2.0",
     "ejs": "^2.6.1",
     "swagger-ui-dist": "^3.18.2"
   },
   "devDependencies": {
-    "@loopback/build": "^0.7.1",
-    "@loopback/testlab": "^0.11.5",
+    "@loopback/build": "^1.0.1",
+    "@loopback/testlab": "^1.0.1",
     "@types/ejs": "^2.6.0",
     "@types/node": "^10.1.1"
   },

@@ -2,7 +2,12 @@
 // Node module: @loopback/explorer
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
-
-export * from './explorer.types';
-export * from './explorer.keys';
-export * from './explorer.component';
+/**
+ * Options to configure API Explorer UI
+ */
+export type ApiExplorerConfig = {
+  /**
+   * URL path where to expose the explorer UI. Default: '/explorer'
+   */
+  path?: string;
+};
