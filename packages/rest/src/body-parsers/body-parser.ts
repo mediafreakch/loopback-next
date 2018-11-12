@@ -71,6 +71,11 @@ export class RequestBodyParser {
         debug('Matched media type: %s -> %s', type, contentType);
         requestBody.mediaType = type;
         requestBody.schema = content[type].schema;
+        // Skip body parsing as the controller method wants to have full control
+        if (content[type]['x-skip-body-parsing']) {
+          requestBody.value = request;
+          return requestBody;
+        }
         break;
       }
     }
