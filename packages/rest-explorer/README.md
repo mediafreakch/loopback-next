@@ -12,7 +12,8 @@ npm install --save @loopback/rest-explorer
 ## Basic use
 
 The component should be loaded in the constructor of your custom Application
-class.
+class. Applications scaffolded by recent versions of our `lb4` CLI tool have the
+self-hosted REST API Explorer pre-configured out of the box.
 
 Start by importing the component class:
 
