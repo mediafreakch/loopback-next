@@ -28,6 +28,9 @@ export class RestExplorerComponent implements Component {
     this.registerControllerRoute('get', explorerPath + '/', 'index');
 
     application.static(explorerPath, swaggerUI.getAbsoluteFSPath());
+
+    // Disable redirect to externally hosted API explorer
+    application.restServer.config.apiExplorer = {disabled: true};
   }
 
   private registerControllerRoute(
