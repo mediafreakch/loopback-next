@@ -1,5 +1,5 @@
 // Copyright IBM Corp. 2018. All Rights Reserved.
-// Node module: @loopback/explorer
+// Node module: @loopback/rest-explorer
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
@@ -11,9 +11,9 @@ import {
   givenHttpServerConfig,
 } from '@loopback/testlab';
 import {
-  ApiExplorerBindings,
-  ApiExplorerComponent,
-  ApiExplorerConfig,
+  RestExplorerBindings,
+  RestExplorerComponent,
+  RestExplorerConfig,
 } from '../..';
 
 describe('API Explorer (acceptance)', () => {
@@ -28,7 +28,7 @@ describe('API Explorer (acceptance)', () => {
   context('with default config', () => {
     beforeEach(async () => {
       app = givenRestApplication();
-      app.component(ApiExplorerComponent);
+      app.component(RestExplorerComponent);
       await app.start();
       request = createRestAppClient(app);
     });
@@ -79,13 +79,13 @@ describe('API Explorer (acceptance)', () => {
 
     async function givenAppWithCustomRestConfig(config: RestServerConfig) {
       app = givenRestApplication(config);
-      app.component(ApiExplorerComponent);
+      app.component(RestExplorerComponent);
       await app.start();
       request = createRestAppClient(app);
     }
   });
 
-  context('with custom ApiExplorerConfig', () => {
+  context('with custom RestExplorerConfig', () => {
     it('honors custom explorer path', async () => {
       await givenAppWithCustomExplorerConfig({
         path: '/openapi/ui',
@@ -103,10 +103,12 @@ describe('API Explorer (acceptance)', () => {
       await request.get('/explorer').expect(404);
     });
 
-    async function givenAppWithCustomExplorerConfig(config: ApiExplorerConfig) {
+    async function givenAppWithCustomExplorerConfig(
+      config: RestExplorerConfig,
+    ) {
       app = givenRestApplication();
-      app.bind(ApiExplorerBindings.CONFIG).to(config);
-      app.component(ApiExplorerComponent);
+      app.bind(RestExplorerBindings.CONFIG).to(config);
+      app.component(RestExplorerComponent);
       await app.start();
       request = createRestAppClient(app);
     }

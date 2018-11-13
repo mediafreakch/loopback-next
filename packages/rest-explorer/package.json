@@ -1,5 +1,5 @@
 {
-  "name": "@loopback/explorer",
+  "name": "@loopback/rest-explorer",
   "version": "0.1.0",
   "description": "LoopBack's API Explorer",
   "engines": {

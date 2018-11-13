@@ -1,6 +1,6 @@
 import {BootMixin} from '@loopback/boot';
 import {ApplicationConfig} from '@loopback/core';
-import {ApiExplorerComponent} from '@loopback/explorer';
+import {RestExplorerComponent} from '@loopback/rest-explorer';
 import {RepositoryMixin} from '@loopback/repository';
 import {RestApplication} from '@loopback/rest';
 import {ServiceMixin} from '@loopback/service-proxy';
@@ -19,7 +19,7 @@ export class SoapCalculatorApplication extends BootMixin(
     // Set up default home page
     this.static('/', path.join(__dirname, '../../public'));
 
-    this.component(ApiExplorerComponent);
+    this.component(RestExplorerComponent);
 
     this.projectRoot = __dirname;
     // Customize @loopback/boot Booter Conventions here

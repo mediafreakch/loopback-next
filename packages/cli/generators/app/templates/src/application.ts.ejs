@@ -1,5 +1,9 @@
 import {BootMixin} from '@loopback/boot';
 import {ApplicationConfig} from '@loopback/core';
+import {
+  RestExplorerBindings,
+  RestExplorerComponent,
+} from '@loopback/rest-explorer';
 <% if (project.repositories) { -%>
 import {RepositoryMixin} from '@loopback/repository';
 <% } -%>

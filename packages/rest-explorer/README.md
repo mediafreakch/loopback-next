@@ -1,11 +1,11 @@
-# @loopback/explorer
+# @loopback/rest-explorer
 
 This module contains a handler to serve API Explorer
 
 ## Installation
 
 ```sh
-npm install --save @loopback/explorer
+npm install --save @loopback/rest-explorer
 ```
 
 ## Contributions
