@@ -35,6 +35,14 @@ this.bind(RestExplorerBindings.CONFIG).to({
 });
 ```
 
+_NOTE: The Explorer UI's visual style is not customizable yet. Our recommend
+solution is to create a fork of this module, make any style changes in the fork
+and publish the modified module under a different name. The
+[GitHub issue #2023](https://github.com/strongloop/loopback-next/issues/2023) is
+requesting a configuration option for customizing the visual style, please
+up-vote the issue and/or join the discussion if you are interested in this
+feature._
+
 ## Contributions
 
 - [Guidelines](https://github.com/strongloop/loopback-next/blob/master/docs/CONTRIBUTING.md)
